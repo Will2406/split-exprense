@@ -35,7 +35,7 @@ export default function AddExpenseModal({
   const [amount, setAmount] = useState("");
   const [paidBy, setPaidBy] = useState(defaultPaidBy);
   const [selectedParticipants, setSelectedParticipants] = useState<Set<string>>(
-    new Set(participants.map((p) => p.id))
+    new Set(participants.filter((p) => p.id !== defaultPaidBy).map((p) => p.id))
   );
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -109,24 +109,18 @@ export default function AddExpenseModal({
       return;
     }
 
-    if (selectedParticipants.size === 0) {
-      setError("Selecciona al menos un participante.");
-      return;
-    }
-
-    if (!selectedParticipants.has(paidBy)) {
-      setError("La persona que pago debe estar entre los participantes.");
-      return;
-    }
-
     setIsSubmitting(true);
 
     try {
+      // Always include the payer in the split
+      const allSplitIds = new Set(selectedParticipants);
+      allSplitIds.add(paidBy);
+
       await onSubmit(
         trimmedDesc,
         Math.round(numAmount * 100) / 100,
         paidBy,
-        Array.from(selectedParticipants)
+        Array.from(allSplitIds)
       );
       onClose();
     } catch {
@@ -242,7 +236,17 @@ export default function AddExpenseModal({
               <select
                 id="expensePaidBy"
                 value={paidBy}
-                onChange={(e) => setPaidBy(e.target.value)}
+                onChange={(e) => {
+                  const newPaidBy = e.target.value;
+                  setPaidBy(newPaidBy);
+                  // Add the old payer back to checkboxes, remove the new payer
+                  setSelectedParticipants((prev) => {
+                    const next = new Set(prev);
+                    next.add(paidBy); // old payer goes back to checkboxes
+                    next.delete(newPaidBy); // new payer is auto-included
+                    return next;
+                  });
+                }}
                 className="w-full rounded-xl border border-gray-300 px-4 py-3 pr-10 text-gray-900 bg-white focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 focus:outline-none transition-all appearance-none"
               >
                 {participants.map((p) => (
@@ -262,10 +266,10 @@ export default function AddExpenseModal({
           {/* Participantes en el gasto */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Entre quienes se divide?
+              Quienes mas participaron?
             </label>
             <div className="space-y-2 max-h-48 overflow-y-auto scrollbar-hide">
-              {participants.map((p) => {
+              {participants.filter((p) => p.id !== paidBy).map((p) => {
                 const isChecked = selectedParticipants.has(p.id);
                 return (
                   <label
@@ -291,15 +295,15 @@ export default function AddExpenseModal({
           </div>
 
           {/* Resumen */}
-          {selectedParticipants.size > 0 && amount && parseFloat(amount) > 0 && (
+          {amount && parseFloat(amount) > 0 && (
             <div className="bg-gradient-to-r from-indigo-50 to-violet-50 rounded-xl px-4 py-3 animate-fade-in">
               <p className="text-sm text-indigo-700">
                 Cada uno paga{" "}
                 <span className="font-bold">
-                  S/ {(parseFloat(amount) / selectedParticipants.size).toFixed(2)}
+                  S/ {(parseFloat(amount) / (selectedParticipants.size + 1)).toFixed(2)}
                 </span>
-                {" "}({selectedParticipants.size}{" "}
-                {selectedParticipants.size === 1 ? "persona" : "personas"})
+                {" "}({selectedParticipants.size + 1}{" "}
+                {selectedParticipants.size + 1 === 1 ? "persona" : "personas"})
               </p>
             </div>
           )}
