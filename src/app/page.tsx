@@ -3,7 +3,7 @@ import CreateRoomForm from "@/components/CreateRoomForm";
 export default function Home() {
   return (
     <div className="flex flex-col flex-1 items-center justify-center px-4 py-8 sm:py-12">
-      <main className="w-full max-w-md animate-fade-in">
+      <main className="w-full max-w-md lg:max-w-lg animate-fade-in">
         {/* Header */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-600 to-violet-600 text-white mb-4 shadow-lg shadow-indigo-200/60">
