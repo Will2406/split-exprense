@@ -218,7 +218,7 @@ export default function SettlementPanel({
                       {participant.name}
                     </p>
                     <p className="text-[11px] sm:text-xs text-gray-400">
-                      Pago {formatAmount(bal.paid)} · Debe {formatAmount(bal.owes)}
+                      Pagó {formatAmount(bal.paid)} · Su parte {formatAmount(bal.owes)}
                     </p>
                   </div>
                 </div>
