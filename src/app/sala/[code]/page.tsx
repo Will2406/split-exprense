@@ -207,7 +207,7 @@ export default function RoomPage({ params }: RoomPageProps) {
     <div className="flex flex-col flex-1 animate-fade-in">
       {/* Header */}
       <header className="bg-white/80 backdrop-blur-md border-b border-gray-200/80 sticky top-0 z-40">
-        <div className="max-w-3xl mx-auto px-3 sm:px-4 lg:px-6 py-3 flex items-center justify-between gap-2">
+        <div className="max-w-screen-xl mx-auto px-3 sm:px-4 lg:px-6 py-3 flex items-center justify-between gap-2">
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-2">
               <h1 className="text-base sm:text-lg font-bold text-gray-900 truncate">
@@ -292,7 +292,7 @@ export default function RoomPage({ params }: RoomPageProps) {
       </header>
 
       {/* Participantes */}
-      <div className="max-w-3xl mx-auto w-full px-3 sm:px-4 lg:px-6 pt-4">
+      <div className="max-w-screen-xl mx-auto w-full px-3 sm:px-4 lg:px-6 pt-4">
         <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-hide">
           {participants.map((p) => (
             <div
@@ -323,7 +323,7 @@ export default function RoomPage({ params }: RoomPageProps) {
       </div>
 
       {/* Tabs (solo mobile) */}
-      <div className="lg:hidden max-w-3xl mx-auto w-full px-3 sm:px-4 pt-3">
+      <div className="lg:hidden max-w-screen-xl mx-auto w-full px-3 sm:px-4 pt-3">
         <div className="flex rounded-xl bg-gray-100 p-1" role="tablist" aria-label="Secciones de la sala">
           <button
             onClick={() => setActiveTab("gastos")}
@@ -355,7 +355,7 @@ export default function RoomPage({ params }: RoomPageProps) {
       </div>
 
       {/* Contenido principal — mobile: tabs, desktop: side by side */}
-      <div className="max-w-3xl mx-auto w-full px-3 sm:px-4 lg:px-6 py-4 flex-1">
+      <div className="max-w-screen-xl mx-auto w-full px-3 sm:px-4 lg:px-6 py-4 flex-1">
         {/* Mobile: tabs */}
         <div className="lg:hidden">
           <div id="tab-gastos" role="tabpanel" className={activeTab === "gastos" ? "animate-fade-in" : "hidden"}>
@@ -395,8 +395,8 @@ export default function RoomPage({ params }: RoomPageProps) {
       </div>
 
       {/* Boton flotante para agregar gasto */}
-      <div className="sticky bottom-0 bg-gradient-to-t from-white via-white/95 to-transparent pt-4 pb-6 px-3 sm:px-4">
-        <div className="max-w-3xl mx-auto">
+      <div className="sticky bottom-0 bg-gradient-to-t from-white via-white/95 to-transparent pt-4 pb-6 px-3 sm:px-4 lg:px-6">
+        <div className="max-w-md mx-auto lg:max-w-lg">
           <button
             onClick={() => setShowAddExpense(true)}
             className="w-full rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 px-6 py-3.5 text-base font-semibold text-white shadow-lg shadow-indigo-300/40 hover:shadow-indigo-400/50 hover:from-indigo-700 hover:to-violet-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 active:scale-[0.98] transition-all duration-200 flex items-center justify-center gap-2"
